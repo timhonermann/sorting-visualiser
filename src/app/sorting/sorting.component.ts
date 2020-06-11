@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {SortingAlgorithms} from '../sorting-algorithms';
-import {Context} from './context';
 import {QuickSort} from './algorithms/quick-sort';
 import {InsertionSort} from './algorithms/insertion-sort';
 import {MergeSort} from './algorithms/merge-sort';
 import {SortingSettings} from './sorting-settings';
 import {SortingAnimation} from './sorting-animation';
 import Timeout = NodeJS.Timeout;
+import {Algorithm} from './algorithms/algorithm';
 
 @Component({
     selector: 'app-sorting',
@@ -15,11 +15,10 @@ import Timeout = NodeJS.Timeout;
 })
 export class SortingComponent implements OnInit {
 
-    sortingAlgorithm: SortingAlgorithms = SortingAlgorithms.QuickSort;
+    selectedSortingAlgorithm: SortingAlgorithms = SortingAlgorithms.QuickSort;
     sortingAlgorithms = SortingAlgorithms;
+    sortingAlgorithm: Algorithm;
     sortingAlgorithmKeys: string[];
-
-    context: Context;
 
     array: number[] = [];
     isSorted: boolean;
@@ -35,8 +34,8 @@ export class SortingComponent implements OnInit {
 
     startSorting(): void {
         const auxiliaryArray = this.array.slice();
-        if (this.context) {
-            this.animations = this.context.getSortingAnimations(auxiliaryArray, this.animations);
+        if (this.sortingAlgorithm) {
+            this.animations = this.sortingAlgorithm.sort(auxiliaryArray, this.animations);
             for (let i = 0; i < this.animations.length; i++) {
                 if (this.animations[i].isSwap) {
                     this.timeouts.push(setTimeout(() => {
@@ -50,24 +49,24 @@ export class SortingComponent implements OnInit {
     }
 
     setSortingStrategy(): void {
-        if (!this.context) {
-            this.context = new Context(new QuickSort());
+        if (!this.sortingAlgorithm) {
+            this.sortingAlgorithm = new QuickSort();
         }
 
         this.generateRandomArray();
 
-        switch (+this.sortingAlgorithm) {
+        switch (+this.selectedSortingAlgorithm) {
             case SortingAlgorithms.QuickSort:
-                this.context.setAlgorithm(new QuickSort());
+                this.sortingAlgorithm = new QuickSort();
                 break;
             case SortingAlgorithms.MergeSort:
-                this.context.setAlgorithm(new MergeSort());
+                this.sortingAlgorithm = new MergeSort();
                 break;
             case SortingAlgorithms.InsertionSort:
-                this.context.setAlgorithm(new InsertionSort());
+                this.sortingAlgorithm = new InsertionSort();
                 break;
             default:
-                this.context.setAlgorithm(new QuickSort());
+                this.sortingAlgorithm = new QuickSort();
         }
     }
 
