@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {SortingAlgorithms} from '../sorting-algorithms';
 import {QuickSort} from './algorithms/quick-sort';
 import {InsertionSort} from './algorithms/insertion-sort';
-import {MergeSort} from './algorithms/merge-sort';
 import {SortingSettings} from './sorting-settings';
 import {SortingAnimation} from './sorting-animation';
 import {Algorithm} from './algorithms/algorithm';
@@ -58,9 +57,6 @@ export class SortingComponent implements OnInit {
         switch (+this.selectedSortingAlgorithm) {
             case SortingAlgorithms.QuickSort:
                 this.sortingAlgorithm = new QuickSort();
-                break;
-            case SortingAlgorithms.MergeSort:
-                this.sortingAlgorithm = new MergeSort();
                 break;
             case SortingAlgorithms.InsertionSort:
                 this.sortingAlgorithm = new InsertionSort();
