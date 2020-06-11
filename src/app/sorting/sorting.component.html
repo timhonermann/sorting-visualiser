@@ -1,5 +1,5 @@
 <div class="container">
-    <select [(ngModel)]="selectedSortingAlgorithm" (change)="setSortingStrategy()">
+    <select [(ngModel)]="selectedSortingAlgorithm" (change)="setSortingAlgorithm()">
         <option *ngFor="let key of sortingAlgorithmKeys"
                 [value]="key"
                 [label]="sortingAlgorithms[key]">

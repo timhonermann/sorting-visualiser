@@ -5,8 +5,8 @@ import {InsertionSort} from './algorithms/insertion-sort';
 import {MergeSort} from './algorithms/merge-sort';
 import {SortingSettings} from './sorting-settings';
 import {SortingAnimation} from './sorting-animation';
-import Timeout = NodeJS.Timeout;
 import {Algorithm} from './algorithms/algorithm';
+import Timeout = NodeJS.Timeout;
 
 @Component({
     selector: 'app-sorting',
@@ -15,10 +15,10 @@ import {Algorithm} from './algorithms/algorithm';
 })
 export class SortingComponent implements OnInit {
 
-    selectedSortingAlgorithm: SortingAlgorithms = SortingAlgorithms.QuickSort;
     sortingAlgorithms = SortingAlgorithms;
     sortingAlgorithm: Algorithm;
     sortingAlgorithmKeys: string[];
+    selectedSortingAlgorithm: SortingAlgorithms = SortingAlgorithms.QuickSort;
 
     array: number[] = [];
     isSorted: boolean;
@@ -27,9 +27,9 @@ export class SortingComponent implements OnInit {
     timeouts: Timeout[] = [];
 
     ngOnInit() {
-        this.sortingAlgorithmKeys = Object.keys(this.sortingAlgorithms).filter(Number);
+        this.sortingAlgorithmKeys = Object.keys(SortingAlgorithms).filter(Number);
         this.generateRandomArray();
-        this.setSortingStrategy();
+        this.setSortingAlgorithm();
     }
 
     startSorting(): void {
@@ -48,7 +48,7 @@ export class SortingComponent implements OnInit {
         }
     }
 
-    setSortingStrategy(): void {
+    setSortingAlgorithm(): void {
         if (!this.sortingAlgorithm) {
             this.sortingAlgorithm = new QuickSort();
         }
