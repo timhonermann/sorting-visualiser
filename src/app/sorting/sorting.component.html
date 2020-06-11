@@ -1,0 +1,19 @@
+<div class="container">
+    <select [(ngModel)]="sortingAlgorithm" (change)="setSortingStrategy()">
+        <option *ngFor="let key of sortingAlgorithmKeys"
+                [value]="key"
+                [label]="sortingAlgorithms[key]">
+        </option>
+    </select>
+    <br/>
+    <button type="button" [disabled]="isSorted" (click)="startSorting()">SORT</button>
+    <button type="button" (click)="generateRandomArray()">Refresh</button>
+    <br/><br/>
+    <div class="array-container">
+        <div *ngFor="let value of array; let i = index"
+             class="array-bar"
+             [ngStyle]="getArrayBarStyle()"
+             [style.width.px]="value">
+        </div>
+    </div>
+</div>
