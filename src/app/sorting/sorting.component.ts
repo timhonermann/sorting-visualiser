@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {SortingAlgorithms} from '../sorting-algorithms';
+import {SortingAlgorithms} from './sorting-algorithms';
 import {QuickSort} from './algorithms/quick-sort';
 import {InsertionSort} from './algorithms/insertion-sort';
 import {SortingSettings} from './sorting-settings';
 import {SortingAnimation} from './sorting-animation';
 import {Algorithm} from './algorithms/algorithm';
+import {SortingState} from './sorting-state';
 import Timeout = NodeJS.Timeout;
 
 @Component({
@@ -17,10 +18,10 @@ export class SortingComponent implements OnInit {
     sortingAlgorithms = SortingAlgorithms;
     sortingAlgorithm: Algorithm;
     sortingAlgorithmKeys: string[];
-    selectedSortingAlgorithm: SortingAlgorithms = SortingAlgorithms.QuickSort;
+    selectedSortingAlgorithm = '1';
+    sortingState: SortingState = SortingState.waiting;
 
     array: number[] = [];
-    isSorted: boolean;
 
     animations: SortingAnimation[];
     timeouts: Timeout[] = [];
@@ -32,6 +33,7 @@ export class SortingComponent implements OnInit {
     }
 
     startSorting(): void {
+        this.sortingState = SortingState.sorting;
         const auxiliaryArray = this.array.slice();
         if (this.sortingAlgorithm) {
             this.animations = this.sortingAlgorithm.sort(auxiliaryArray, this.animations);
@@ -48,11 +50,6 @@ export class SortingComponent implements OnInit {
     }
 
     setSortingAlgorithm(): void {
-        if (!this.sortingAlgorithm) {
-            this.sortingAlgorithm = new QuickSort();
-        }
-
-        this.generateRandomArray();
 
         switch (+this.selectedSortingAlgorithm) {
             case SortingAlgorithms.QuickSort:
@@ -69,7 +66,7 @@ export class SortingComponent implements OnInit {
     generateRandomArray() {
         this.stopTimeouts();
         this.animations = [];
-        this.isSorted = false;
+        this.sortingState = SortingState.waiting;
         this.array = Array.from(
             { length: SortingSettings.DEFAULT_ARRAY_SIZE },
             () => Math.floor(
@@ -81,12 +78,14 @@ export class SortingComponent implements OnInit {
 
     getArrayBarStyle() {
         return {
-            'background-color': this.isSorted ? SortingSettings.SORTED_COLOR : SortingSettings.PRIMARY_COLOR,
+            'background-color': this.sortingState === SortingState.sorted ? SortingSettings.SORTED_COLOR : SortingSettings.PRIMARY_COLOR,
         };
     }
 
     private setIsSortedIfEndOfAnimations(index: number) {
-        this.isSorted = index === this.animations.length - 1;
+        if (index === this.animations.length - 1) {
+            this.sortingState = SortingState.sorted;
+        }
     }
 
     private stopTimeouts() {

@@ -1,14 +1,25 @@
+<div class="header">
+    <span class="title">Sorting Visualiser</span>
+    <span class="info">Tim Honermann</span>
+</div>
+
 <div class="container">
-    <select [(ngModel)]="selectedSortingAlgorithm" (change)="setSortingAlgorithm()">
-        <option *ngFor="let key of sortingAlgorithmKeys"
-                [value]="key"
-                [label]="sortingAlgorithms[key]">
-        </option>
-    </select>
-    <br/>
-    <button type="button" [disabled]="isSorted" (click)="startSorting()">SORT</button>
-    <button type="button" (click)="generateRandomArray()">Refresh</button>
-    <br/><br/>
+    <div class="sub-header">
+        <mat-form-field>
+            <mat-label>Sorting Algorithm:</mat-label>
+            <mat-select [(ngModel)]="selectedSortingAlgorithm" (selectionChange)="setSortingAlgorithm()" >
+                <mat-option *ngFor="let key of sortingAlgorithmKeys"
+                            [value]="key">
+                    {{ sortingAlgorithms[key] }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="button-container">
+            <button mat-raised-button color="primary"  [disabled]="sortingState !== 1" (click)="startSorting()">Sort</button>
+            <div class="divider"></div>
+            <button mat-raised-button color="accent" (click)="generateRandomArray()">Refresh</button>
+        </div>
+    </div>
     <div class="array-container">
         <div *ngFor="let value of array; let i = index"
              class="array-bar"
