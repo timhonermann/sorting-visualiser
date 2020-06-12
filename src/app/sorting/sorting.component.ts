@@ -4,9 +4,10 @@ import {QuickSort} from './algorithms/quick-sort';
 import {InsertionSort} from './algorithms/insertion-sort';
 import {SortingSettings} from './sorting-settings';
 import {SortingAnimation} from './sorting-animation';
-import {Algorithm} from './algorithms/algorithm';
+import {SortingAlgorithm} from './algorithms/sorting-algorithm';
 import {SortingState} from './sorting-state';
 import Timeout = NodeJS.Timeout;
+import {BubbleSort} from './algorithms/bubble-sort';
 
 @Component({
     selector: 'app-sorting',
@@ -16,7 +17,7 @@ import Timeout = NodeJS.Timeout;
 export class SortingComponent implements OnInit {
 
     sortingAlgorithms = SortingAlgorithms;
-    sortingAlgorithm: Algorithm;
+    sortingAlgorithm: SortingAlgorithm;
     sortingAlgorithmKeys: string[];
     selectedSortingAlgorithm = '1';
     sortingState: SortingState = SortingState.waiting;
@@ -40,13 +41,15 @@ export class SortingComponent implements OnInit {
         if (this.sortingAlgorithm) {
             this.animations = this.sortingAlgorithm.sort(auxiliaryArray, this.animations);
             for (let i = 0; i < this.animations.length; i++) {
-                if (this.animations[i].isSwap) {
-                    this.timeouts.push(setTimeout(() => {
-                        const [indexOne, indexTwo] = this.animations[i].barIndexes;
+                this.timeouts.push(setTimeout(() => {
+                    const [indexOne, indexTwo] = this.animations[i].barIndexes;
+                    if (this.animations[i].isSwap) {
                         [this.array[indexOne], this.array[indexTwo]] = [this.array[indexTwo], this.array[indexOne]];
-                        this.setIsSortedIfEndOfAnimations(i);
-                    }, i * (SortingSettings.ANIMATION_SPEED / this.animations.length)));
-                }
+                    } else {
+                        // TODO: Animation for comparing values
+                    }
+                    this.setIsSortedIfEndOfAnimations(i);
+                }, i * (SortingSettings.ANIMATION_SPEED / this.animations.length)));
             }
         }
     }
@@ -59,6 +62,9 @@ export class SortingComponent implements OnInit {
                 break;
             case SortingAlgorithms.InsertionSort:
                 this.sortingAlgorithm = new InsertionSort();
+                break;
+            case SortingAlgorithms.BubbleSort:
+                this.sortingAlgorithm = new BubbleSort();
                 break;
             default:
                 this.sortingAlgorithm = new QuickSort();

@@ -1,7 +1,7 @@
-import {Algorithm} from './algorithm';
+import {SortingAlgorithm} from './sorting-algorithm';
 import {SortingAnimation} from '../sorting-animation';
 
-export class QuickSort implements Algorithm {
+export class QuickSort implements SortingAlgorithm {
 
     private static partition(data: Array<number>,
                              animations: SortingAnimation[] = [] ,

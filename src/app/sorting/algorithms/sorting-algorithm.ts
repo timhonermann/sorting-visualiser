@@ -1,5 +1,5 @@
 import {SortingAnimation} from '../sorting-animation';
 
-export interface Algorithm {
+export interface SortingAlgorithm {
     sort(array: number[], animations: SortingAnimation[]): SortingAnimation[];
 }
