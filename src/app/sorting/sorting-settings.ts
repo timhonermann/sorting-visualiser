@@ -5,5 +5,5 @@ export class SortingSettings {
 
     public static MAXIMUM_ARRAY_VALUE = 1000;
 
-    public static ANIMATION_SPEED = 5000;
+    public static ANIMATION_SPEED = 10000;
 }
