@@ -24,7 +24,7 @@
         <div *ngFor="let value of array; let i = index"
              class="array-bar"
              [ngClass]="{'sorted': sortingState === 3}"
-             [style.width.%]="value / 20">
+             [style.width.%]="value / maxArrayBar * 50">
         </div>
     </div>
 </div>

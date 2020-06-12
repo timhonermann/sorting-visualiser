@@ -22,6 +22,7 @@ export class SortingComponent implements OnInit {
     sortingState: SortingState = SortingState.waiting;
 
     array: number[] = [];
+    maxArrayBar = 0;
 
     animations: SortingAnimation[];
 
@@ -75,6 +76,7 @@ export class SortingComponent implements OnInit {
                     (SortingSettings.MAXIMUM_ARRAY_VALUE - SortingSettings.MINIMUM_ARRAY_VALUE))
                     + SortingSettings.MINIMUM_ARRAY_VALUE
         );
+        this.maxArrayBar = Math.max(...this.array);
     }
 
     private setIsSortedIfEndOfAnimations(index: number) {
