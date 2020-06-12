@@ -24,6 +24,7 @@ export class SortingComponent implements OnInit {
     array: number[] = [];
 
     animations: SortingAnimation[];
+
     timeouts: Timeout[] = [];
 
     ngOnInit() {
@@ -43,7 +44,7 @@ export class SortingComponent implements OnInit {
                         const [indexOne, indexTwo] = this.animations[i].barIndexes;
                         [this.array[indexOne], this.array[indexTwo]] = [this.array[indexTwo], this.array[indexOne]];
                         this.setIsSortedIfEndOfAnimations(i);
-                    }, i * SortingSettings.ANIMATION_SPEED_MS));
+                    }, i * (SortingSettings.ANIMATION_SPEED / this.animations.length)));
                 }
             }
         }
@@ -74,12 +75,6 @@ export class SortingComponent implements OnInit {
                     (SortingSettings.MAXIMUM_ARRAY_VALUE - SortingSettings.MINIMUM_ARRAY_VALUE))
                     + SortingSettings.MINIMUM_ARRAY_VALUE
         );
-    }
-
-    getArrayBarStyle() {
-        return {
-            'background-color': this.sortingState === SortingState.sorted ? SortingSettings.SORTED_COLOR : SortingSettings.PRIMARY_COLOR,
-        };
     }
 
     private setIsSortedIfEndOfAnimations(index: number) {
