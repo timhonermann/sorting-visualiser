@@ -8,6 +8,7 @@ import {SortingAlgorithm} from './algorithms/sorting-algorithm';
 import {SortingState} from './sorting-state';
 import Timeout = NodeJS.Timeout;
 import {BubbleSort} from './algorithms/bubble-sort';
+import {SelectionSort} from './algorithms/selection-sort';
 
 @Component({
     selector: 'app-sorting',
@@ -42,14 +43,26 @@ export class SortingComponent implements OnInit {
             this.animations = this.sortingAlgorithm.sort(auxiliaryArray, this.animations);
             for (let i = 0; i < this.animations.length; i++) {
                 this.timeouts.push(setTimeout(() => {
-                    const [indexOne, indexTwo] = this.animations[i].barIndexes;
+                    let [indexOne, indexTwo] = this.animations[i].barIndexes;
                     if (this.animations[i].isSwap) {
                         [this.array[indexOne], this.array[indexTwo]] = [this.array[indexTwo], this.array[indexOne]];
                     } else {
-                        // TODO: Animation for comparing values
+                        const arrayBars = document.getElementsByClassName('array-bar');
+
+                        let j = 0;
+                        while (j < arrayBars.length) {
+                            arrayBars[j].classList.remove('compared');
+                            j++;
+                        }
+
+                        [indexOne, indexTwo] = this.animations[i].barIndexes;
+                        const barOne = arrayBars[indexOne] as HTMLElement;
+                        const barTwo = arrayBars[indexTwo] as HTMLElement;
+                        barOne.classList.add('compared');
+                        barTwo.classList.add('compared');
                     }
                     this.setIsSortedIfEndOfAnimations(i);
-                }, i * (SortingSettings.ANIMATION_SPEED / this.animations.length)));
+                }, i * SortingSettings.ANIMATION_SPEED));
             }
         }
     }
@@ -65,6 +78,9 @@ export class SortingComponent implements OnInit {
                 break;
             case SortingAlgorithms.BubbleSort:
                 this.sortingAlgorithm = new BubbleSort();
+                break;
+            case SortingAlgorithms.SelectionSort:
+                this.sortingAlgorithm = new SelectionSort();
                 break;
             default:
                 this.sortingAlgorithm = new QuickSort();

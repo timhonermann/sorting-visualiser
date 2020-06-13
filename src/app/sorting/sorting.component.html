@@ -15,8 +15,6 @@
             </mat-select>
         </mat-form-field>
         <div class="button-container">
-            <mat-icon matTooltip="Sorting speeds can not be compared">info</mat-icon>
-            <div class="divider"></div>
             <button mat-raised-button color="primary"  [disabled]="sortingState !== 1" (click)="startSorting()">Sort</button>
             <div class="divider"></div>
             <button mat-raised-button color="accent" (click)="generateRandomArray()">Refresh</button>
