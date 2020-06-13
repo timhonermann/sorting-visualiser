@@ -9,6 +9,7 @@
 
     .title {
         font-size: 25px;
+        font-weight: bold;
         color: white;
     }
 
@@ -50,11 +51,11 @@
             height: 3px;
             margin: 3px 0;
             border: none;
-            background-color: orange;
+            background-color: lightskyblue;
         }
 
         .compared {
-            background-color: red;
+            background-color: #ff4081;
         }
 
         .sorted {

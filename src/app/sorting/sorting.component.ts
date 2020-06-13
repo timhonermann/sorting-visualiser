@@ -6,9 +6,9 @@ import {SortingSettings} from './sorting-settings';
 import {SortingAnimation} from './sorting-animation';
 import {SortingAlgorithm} from './algorithms/sorting-algorithm';
 import {SortingState} from './sorting-state';
-import Timeout = NodeJS.Timeout;
 import {BubbleSort} from './algorithms/bubble-sort';
 import {SelectionSort} from './algorithms/selection-sort';
+import Timeout = NodeJS.Timeout;
 
 @Component({
     selector: 'app-sorting',
@@ -20,11 +20,12 @@ export class SortingComponent implements OnInit {
     sortingAlgorithms = SortingAlgorithms;
     sortingAlgorithm: SortingAlgorithm;
     sortingAlgorithmKeys: string[];
-    selectedSortingAlgorithm = '1';
+    selectedSortingAlgorithm = SortingAlgorithms.QuickSort.toString();
     sortingState: SortingState = SortingState.waiting;
 
     array: number[] = [];
     maxArrayBar = 0;
+    comparedValues: number[] = [];
 
     animations: SortingAnimation[];
 
@@ -39,27 +40,18 @@ export class SortingComponent implements OnInit {
     startSorting(): void {
         this.sortingState = SortingState.sorting;
         const auxiliaryArray = this.array.slice();
+
         if (this.sortingAlgorithm) {
             this.animations = this.sortingAlgorithm.sort(auxiliaryArray, this.animations);
+
             for (let i = 0; i < this.animations.length; i++) {
                 this.timeouts.push(setTimeout(() => {
-                    let [indexOne, indexTwo] = this.animations[i].barIndexes;
+                    const [indexOne, indexTwo] = this.animations[i].barIndexes;
                     if (this.animations[i].isSwap) {
                         [this.array[indexOne], this.array[indexTwo]] = [this.array[indexTwo], this.array[indexOne]];
                     } else {
-                        const arrayBars = document.getElementsByClassName('array-bar');
-
-                        let j = 0;
-                        while (j < arrayBars.length) {
-                            arrayBars[j].classList.remove('compared');
-                            j++;
-                        }
-
-                        [indexOne, indexTwo] = this.animations[i].barIndexes;
-                        const barOne = arrayBars[indexOne] as HTMLElement;
-                        const barTwo = arrayBars[indexTwo] as HTMLElement;
-                        barOne.classList.add('compared');
-                        barTwo.classList.add('compared');
+                        this.comparedValues = [];
+                        this.comparedValues.push(...this.animations[i].barIndexes);
                     }
                     this.setIsSortedIfEndOfAnimations(i);
                 }, i * SortingSettings.ANIMATION_SPEED));
@@ -90,6 +82,7 @@ export class SortingComponent implements OnInit {
     generateRandomArray() {
         this.stopTimeouts();
         this.animations = [];
+        this.comparedValues = [];
         this.sortingState = SortingState.waiting;
         this.array = Array.from(
             { length: SortingSettings.DEFAULT_ARRAY_SIZE },
@@ -99,6 +92,22 @@ export class SortingComponent implements OnInit {
                     + SortingSettings.MINIMUM_ARRAY_VALUE
         );
         this.maxArrayBar = Math.max(...this.array);
+    }
+
+    getIsArraySorted(): boolean {
+        return this.sortingState === SortingState.sorted;
+    }
+
+    getIsBeingCompared(index: number): boolean {
+        return this.comparedValues.includes(index);
+    }
+
+    getIsSortButtonDisabled(): boolean {
+        return this.sortingState !== SortingState.waiting;
+    }
+
+    getArrayBarWidth(value: number): number {
+        return value / this.maxArrayBar * 50;
     }
 
     private setIsSortedIfEndOfAnimations(index: number) {

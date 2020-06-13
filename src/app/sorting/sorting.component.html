@@ -15,7 +15,7 @@
             </mat-select>
         </mat-form-field>
         <div class="button-container">
-            <button mat-raised-button color="primary"  [disabled]="sortingState !== 1" (click)="startSorting()">Sort</button>
+            <button mat-raised-button color="primary"  [disabled]="getIsSortButtonDisabled()" (click)="startSorting()">Sort</button>
             <div class="divider"></div>
             <button mat-raised-button color="accent" (click)="generateRandomArray()">Refresh</button>
         </div>
@@ -23,8 +23,8 @@
     <div class="array-container">
         <div *ngFor="let value of array; let i = index"
              class="array-bar"
-             [ngClass]="{'sorted': sortingState === 3}"
-             [style.width.%]="value / maxArrayBar * 50">
+             [ngClass]="{sorted: getIsArraySorted(), compared: getIsBeingCompared(i) }"
+             [style.width.%]="getArrayBarWidth(value)">
         </div>
     </div>
 </div>
