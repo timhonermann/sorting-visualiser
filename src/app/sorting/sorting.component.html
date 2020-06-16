@@ -6,7 +6,7 @@
 <div class="container">
     <div class="sub-header">
         <mat-form-field>
-            <mat-label>Sorting SortingAlgorithm:</mat-label>
+            <mat-label>Sorting Algorithm:</mat-label>
             <mat-select [(ngModel)]="selectedSortingAlgorithm" (selectionChange)="setSortingAlgorithm()" >
                 <mat-option *ngFor="let key of sortingAlgorithmKeys"
                             [value]="key">
